@@ -28,14 +28,14 @@ public class InstrucoesGenericas {
 		return true;
 	}
 
-	public static void altera(String table, String campo, String campoPk, String valor, String valorPk)
+	public static void altera(String table, String campo, String campoPk, String valor, int valorPk)
 			throws SQLException {
 		// método genérico para alterar um valor
 		Connection con = ConnectionFactory.getConnection();
 		String sql = "update " + table + " set " + campo + " =? where " + campoPk + " = ?; ";
 		PreparedStatement stmt = con.prepareStatement(sql);
 		stmt.setString(1, valor);
-		stmt.setString(2, valorPk);
+		stmt.setInt(2, valorPk);
 		stmt.executeUpdate();
 		ConnectionFactory.closeConnection(con, stmt);
 

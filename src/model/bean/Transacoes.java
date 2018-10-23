@@ -1,48 +1,35 @@
 package model.bean;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
+
 
 public class Transacoes {
-	private int codTransacao,codProduto;
+	private int codTransacao,codAnuncio,codUsuario;
 	private String data;
-	private String status, usuarioInteressado;
 	public int getCodTransacao() {
 		return codTransacao;
 	}
 	public void setCodTransacao(int codTransacao) {
 		this.codTransacao = codTransacao;
 	}
-	public int getCodProduto() {
-		return codProduto;
+	public int getCodAnuncio() {
+		return codAnuncio;
 	}
-	public void setCodProduto(int codProduto) {
-		this.codProduto = codProduto;
+	public void setCodAnuncio(int codAnuncio) {
+		this.codAnuncio = codAnuncio;
 	}
-	public String  getData() {
+	public int getCodUsuario() {
+		return codUsuario;
+	}
+	public void setCodUsuario(int codUsuario) {
+		this.codUsuario = codUsuario;
+	}
+	public String getData() {
 		return data;
 	}
-	public void setData() {
-	     LocalDate date;
-	      date = LocalDate.now();
-	      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-	      String dataFormatada = date.format(formatter);
-	      data=dataFormatada;
-	
+	public void setData(String data) {
+		this.data = data;
 	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	public String getUsuarioInteressado() {
-		return usuarioInteressado;
-	}
-	public void setUsuarioInteressado(String usuarioInteressado) {
-		this.usuarioInteressado = usuarioInteressado;
-	}
-	
+
+
 	
 
 }

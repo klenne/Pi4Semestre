@@ -12,12 +12,13 @@ public class UsuarioDAO {// Usuario Data Acess Object
 	// objeto com métodos que realizam instruções sql genéricas, para evitar
 	// repetição de código
 	InstrucoesGenericas ig;
-	private final String TABLE = "usuario";
+	private final String TABLE = "USUARIO", PK = "cod_usuario";
 
 	public void cadastrar(Usuario u) {
 
 		// Instrução SQL
-		String InsereUsuario = "INSERT INTO usuario (email,nome,cpf,senha,telefone,uf,cidade,bairro,foto) VALUES(?,?,?,?,?,?,?,?,?)";
+		String InsereUsuario = "INSERT INTO  " + TABLE
+				+ "  (email,nome,senha,telefone,uf,cidade,bairro,foto) VALUES(?,?,?,?,?,?,?,?)";
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 
@@ -26,13 +27,12 @@ public class UsuarioDAO {// Usuario Data Acess Object
 			stmt = con.prepareStatement(InsereUsuario);
 			stmt.setString(1, u.getEmail());
 			stmt.setString(2, u.getNome());
-			stmt.setString(3, u.getCpf());
-			stmt.setString(4, u.getSenha());
-			stmt.setString(5, u.getTelefone());
-			stmt.setString(6, u.getUf());
-			stmt.setString(7, u.getCidade());
-			stmt.setString(8, u.getBairro());
-			stmt.setString(9, u.getFoto());
+			stmt.setString(3, u.getSenha());
+			stmt.setString(4, u.getTelefone());
+			stmt.setString(5, u.getUf());
+			stmt.setString(6, u.getCidade());
+			stmt.setString(7, u.getBairro());
+			stmt.setString(8, u.getFoto());
 			stmt.executeUpdate();
 
 		} catch (SQLException ex) {
@@ -50,7 +50,7 @@ public class UsuarioDAO {// Usuario Data Acess Object
 		 */
 
 		// instrução SQL
-		String querryBusca = "select email,nome,cpf,senha,telefone,uf,cidade,bairro,foto  from usuario where email=?";
+		String querryBusca = "select cod_usuario,email,nome,senha,telefone,uf,cidade,bairro,foto  from " +TABLE+"  where email=?";
 
 		Connection con = ConnectionFactory.getConnection();
 
@@ -64,9 +64,9 @@ public class UsuarioDAO {// Usuario Data Acess Object
 
 			// construindo um objeto usuario
 			rs.next();
+			u.setCodUsuario(rs.getInt("cod_usuario"));
 			u.setEmail(rs.getString("email"));
 			u.setNome(rs.getString("nome"));
-			u.setCpf(rs.getString("cpf"));
 			u.setSenha(rs.getString("senha"));
 			u.setTelefone(rs.getString("telefone"));
 			u.setUf(rs.getString("uf"));
@@ -89,7 +89,7 @@ public class UsuarioDAO {// Usuario Data Acess Object
 		 */
 
 		Connection con = ConnectionFactory.getConnection();
-		String sql = "select Count(email)as login from usuario where email=? and senha=?";
+		String sql = "select Count(email)as login from " +TABLE+" where email=? and senha=?";
 		PreparedStatement stmt = con.prepareStatement(sql);
 		stmt.setString(1, email);
 		stmt.setString(2, senha);
@@ -111,42 +111,31 @@ public class UsuarioDAO {// Usuario Data Acess Object
 		 * quando for cadastrar um novo usuário se ele já existe retorna false, senão
 		 * retorna true
 		 */
-		String campo="email";
+		String campo = "email";
 		return InstrucoesGenericas.check(campo, email, TABLE);
-	}
-
-	public boolean checkCPF(String cpf) throws SQLException {
-		/*
-		 * Método para verificar se já estão utilizando o cpf passado como parâmetro
-		 * quando for cadastrar um novo usuário se ele já existe retorna false, senão
-		 * retorna true
-		 */
-		String campo="cpf";
-		return InstrucoesGenericas.check(campo, cpf, TABLE);
-
 	}
 
 	public void alterarSenha(Usuario u, String senhaNova) throws SQLException {
 
-		InstrucoesGenericas.altera(TABLE, "senha", "email", senhaNova, u.getEmail());
+		InstrucoesGenericas.altera(TABLE, "senha", PK, senhaNova, u.getCodUsuario());
 
 	}
 
 	public void alterarEndereco(Usuario u, String ufNova, String cidadeNova, String bairroNovo) throws SQLException {
 		// alterando uf, cidade e bairro
-		InstrucoesGenericas.altera(TABLE, "uf", "email", ufNova, u.getEmail());
-		InstrucoesGenericas.altera(TABLE, "cidade", "email", cidadeNova, u.getEmail());
-		InstrucoesGenericas.altera(TABLE, "bairro", "email", bairroNovo, u.getEmail());
+		InstrucoesGenericas.altera(TABLE, "uf", PK, ufNova, u.getCodUsuario());
+		InstrucoesGenericas.altera(TABLE, "cidade", PK, cidadeNova, u.getCodUsuario());
+		InstrucoesGenericas.altera(TABLE, "bairro", PK, bairroNovo, u.getCodUsuario());
 
 	}
 
 	public void alterarNome(Usuario u, String novoNome) throws SQLException {
-		InstrucoesGenericas.altera(TABLE, "nome", "email", novoNome, u.getEmail());
+		InstrucoesGenericas.altera(TABLE, "nome", PK, novoNome, u.getCodUsuario());
 
 	}
 
 	public void alterarTelefone(Usuario u, String novoTelefone) throws SQLException {
-		InstrucoesGenericas.altera(TABLE, "telefone", "email", novoTelefone, u.getEmail());
+		InstrucoesGenericas.altera(TABLE, "telefone", PK, novoTelefone, u.getCodUsuario());
 
 	}
 

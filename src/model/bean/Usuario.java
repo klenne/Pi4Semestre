@@ -1,7 +1,16 @@
 package model.bean;
 
 public class Usuario {
-	private String email,nome,cpf,senha,telefone,uf,cidade,bairro,foto;
+	private int codUsuario;
+	private String email, nome, senha, telefone, uf, cidade, bairro, foto;
+
+	public int getCodUsuario() {
+		return codUsuario;
+	}
+
+	public void setCodUsuario(int codUsuario) {
+		this.codUsuario = codUsuario;
+	}
 
 	public String getEmail() {
 		return email;
@@ -17,14 +26,6 @@ public class Usuario {
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	public String getCpf() {
-		return cpf;
-	}
-
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
 	}
 
 	public String getSenha() {
@@ -74,7 +75,5 @@ public class Usuario {
 	public void setFoto(String foto) {
 		this.foto = foto;
 	}
-	
-	
 
 }

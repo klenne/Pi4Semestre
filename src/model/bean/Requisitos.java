@@ -1,8 +1,9 @@
 package model.bean;
 
 public class Requisitos {
-	private int codRequisito, codProduto;
+	private int codRequisito, codAnuncio;
 	private String interesseEm;
+	
 	public int getCodRequisito() {
 		return codRequisito;
 	}
@@ -10,10 +11,10 @@ public class Requisitos {
 		this.codRequisito = codRequisito;
 	}
 	public int getCodProduto() {
-		return codProduto;
+		return codAnuncio;
 	}
 	public void setCodProduto(int codProduto) {
-		this.codProduto = codProduto;
+		this.codAnuncio = codProduto;
 	}
 	public String getInteresseEm() {
 		return interesseEm;
