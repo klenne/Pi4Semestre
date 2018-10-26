@@ -14,7 +14,7 @@ public class TestejChooser {
 	public static void main(String args[]) throws HeadlessException, IOException {
 
 		Usuario u = new Usuario();
-		UsuarioDAO uDAO = new UsuarioDAO();
+	//	UsuarioDAO uDAO = new UsuarioDAO();
 
 		ImageEncoder ie = new ImageEncoder();
 		u.setFoto(ie.lerImagem());
