@@ -50,8 +50,12 @@ public class UsuarioDAO {// Usuario Data Acess Object
 		 */
 
 		// instrução SQL
+<<<<<<< HEAD
 		String querryBusca = "select cod_usuario,email,nome,senha,telefone,uf,cidade,bairro,foto  from " + TABLE
 				+ "  where email=?";
+=======
+		String querryBusca = "select cod_usuario,email,nome,senha,telefone,uf,cidade,bairro,foto  from " +TABLE+"  where email=?";
+>>>>>>> origin/master
 
 		Connection con = ConnectionFactory.getConnection();
 
@@ -90,7 +94,11 @@ public class UsuarioDAO {// Usuario Data Acess Object
 		 */
 
 		Connection con = ConnectionFactory.getConnection();
+<<<<<<< HEAD
 		String sql = "select Count(email)as login from " + TABLE + " where email=? and senha=?";
+=======
+		String sql = "select Count(email)as login from " +TABLE+" where email=? and senha=?";
+>>>>>>> origin/master
 		PreparedStatement stmt = con.prepareStatement(sql);
 		stmt.setString(1, email);
 		stmt.setString(2, senha);
@@ -140,7 +148,10 @@ public class UsuarioDAO {// Usuario Data Acess Object
 
 	}
 
+<<<<<<< HEAD
 	public void alterarFoto(Usuario u, String novaFoto) throws SQLException {
 		InstrucoesGenericas.altera(TABLE, "foto", PK, novaFoto, u.getCodUsuario());
 	}
+=======
+>>>>>>> origin/master
 }
