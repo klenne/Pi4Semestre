@@ -9,7 +9,7 @@ import model.bean.Usuario;
 import model.dao.UsuarioDAO;
 import utilitarios.ImageEncoder;
 
-public class testejChooser {
+public class TestejChooser {
 
 	public static void main(String args[]) throws HeadlessException, IOException {
 
