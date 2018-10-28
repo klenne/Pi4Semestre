@@ -26,6 +26,7 @@ public class ConnectionFactory {
 	private static final String USER = "klenne";
 	private static final String PASS = "U87txy23aK9E@";
 
+
 	public static Connection getConnection() {
 		try {
 			Class.forName(DRIVER);

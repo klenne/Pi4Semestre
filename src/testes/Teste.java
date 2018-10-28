@@ -39,32 +39,26 @@ public class Teste {
 
 		/////////////////////////////////////////////////////////////////////////////////////////////////
 
-		/*
-		 * UsuarioDAO uDAO = new UsuarioDAO(); try {
-		 * System.out.println(uDAO.login("teste@teste.com", "123mudar")); } catch
-		 * (SQLException e) { e.printStackTrace(); }
-		 * 
-		 * teste do método login
-		 * 
-		 */
+		UsuarioDAO uDAO = new UsuarioDAO();
+		try {
+			System.out.println(uDAO.login("teste@teste.com", "123mudar"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		}
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
-/*
-		Usuario u = new Usuario();
-		UsuarioDAO uDAO = new UsuarioDAO();
-		u.setEmail("teste@teste.com");
-		u.setCodUsuario(1);
-		try {
-			uDAO.alterarEndereco(u, "SP", "Ferraz", "Sítio paredão");
-			uDAO.alterarNome(u, "Guilherme");
-			uDAO.alterarSenha(u, "123");
-			uDAO.alterarTelefone(u, "754675673");
-
-			System.out.println("testando email " + uDAO.checkEmail("teste@teste.com"));
-		} catch (SQLException e) { // TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-*/
+		/*
+		 * Usuario u = new Usuario(); UsuarioDAO uDAO = new UsuarioDAO();
+		 * u.setEmail("teste@teste.com"); u.setCodUsuario(1); try {
+		 * uDAO.alterarEndereco(u, "SP", "Ferraz", "Sítio paredão"); uDAO.alterarNome(u,
+		 * "Guilherme"); uDAO.alterarSenha(u, "123"); uDAO.alterarTelefone(u,
+		 * "754675673");
+		 * 
+		 * System.out.println("testando email " + uDAO.checkEmail("teste@teste.com")); }
+		 * catch (SQLException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 */
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	}
