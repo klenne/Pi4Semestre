@@ -1,5 +1,7 @@
 package utilitarios;
 
+import javax.swing.JOptionPane;
+
 public class TextFormatter {
 	
 	public boolean verificaEspacosEmbranco(String texto) {
@@ -10,6 +12,8 @@ public class TextFormatter {
 		return true;
 		
 	}
+        
+      
 	
 
 }

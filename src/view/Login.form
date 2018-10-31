@@ -131,8 +131,8 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="loginSenha" min="-2" pref="25" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="esqueciMinhaSenha" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                      <Component id="esqueciMinhaSenha" min="-2" pref="25" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                       <Component id="botaoEntrar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace pref="172" max="32767" attributes="0"/>
                   </Group>
@@ -204,6 +204,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Esqueci minha Senha"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="esqueciMinhaSenhaMouseClicked"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel5">
               <Properties>
@@ -226,6 +229,9 @@
                   <Dimension value="[80, 25]"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botaoEntrarActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

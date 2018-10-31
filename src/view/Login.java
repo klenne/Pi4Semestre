@@ -1,5 +1,6 @@
 package view;
 
+import emailSender.EmailSender;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -23,7 +24,7 @@ public class Login extends javax.swing.JFrame {
     public Login() throws SQLException {
         initComponents();
 
-        for (CidadeEstado ce : ceDAO.buscaUF()) {
+        for (CidadeEstado ce : ceDAO.buscaUF()) {//inicializando combobox UF com as ufs presentes no bd
             jComboBox1.addItem(ce.getUf());
 
         }
@@ -107,6 +108,11 @@ public class Login extends javax.swing.JFrame {
         esqueciMinhaSenha.setFont(new java.awt.Font("Verdana", 0, 10)); // NOI18N
         esqueciMinhaSenha.setForeground(new java.awt.Color(0, 0, 204));
         esqueciMinhaSenha.setText("Esqueci minha Senha");
+        esqueciMinhaSenha.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                esqueciMinhaSenhaMouseClicked(evt);
+            }
+        });
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/Imagens/e1d6d506-06cb-4e7b-b56e-0c6bb776db86.png"))); // NOI18N
         jLabel5.setText("jLabel5");
@@ -115,6 +121,11 @@ public class Login extends javax.swing.JFrame {
         botaoEntrar.setFont(new java.awt.Font("Verdana", 0, 11)); // NOI18N
         botaoEntrar.setText("ENTRAR");
         botaoEntrar.setPreferredSize(new java.awt.Dimension(80, 25));
+        botaoEntrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoEntrarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -159,8 +170,8 @@ public class Login extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(loginSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(esqueciMinhaSenha)
-                .addGap(35, 35, 35)
+                .addComponent(esqueciMinhaSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24)
                 .addComponent(botaoEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(172, Short.MAX_VALUE))
         );
@@ -389,17 +400,17 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
-        // TODO add your handling code here:
+        //quando o usuario selecionar a uf é executado a thread abaixo
         new Thread(t1).start();
 
     }//GEN-LAST:event_jComboBox1ItemStateChanged
-    //para executar enquanto o programa fica disponível para outras coisas
-    private Runnable t1 = new Runnable() {
+
+    private Runnable t1 = new Runnable() {   //para buscar cidades  no BD com a uf selecionada
         public void run() {
             jComboBox2.removeAllItems();
             String uf = (String) jComboBox1.getSelectedItem();
             try {
-                for (CidadeEstado ce : ceDAO.buscaCidade(uf)) {
+                for (CidadeEstado ce : ceDAO.buscaCidade(uf)) {//preenchendo combobox  CIDADE com as cidades
                     jComboBox2.addItem(ce.getCidade());
                 }
             } catch (SQLException ex) {
@@ -411,8 +422,8 @@ public class Login extends javax.swing.JFrame {
 
 
     private void jLabelFotoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelFotoMouseClicked
-        // TODO add your handling code here:
-        u.setFoto(ie.lerImagem());
+
+        u.setFoto(ie.lerImagem());  // abre um jchooser para escolher uma foto e converte bara base64 guardando no atributo foto de usuario
         try {
             jLabelFoto.setIcon(ie.ConverterImagem(u));
         } catch (IOException ex) {
@@ -423,26 +434,31 @@ public class Login extends javax.swing.JFrame {
 
 
     private void botaoCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCadastrarActionPerformed
-        // TODO add your handling code here:
-        String senhaA=String.valueOf(cadastroSenha.getPassword());
-        String senhaB=String.valueOf(cadastroConfirmarSenha.getPassword());
-        if (tf.verificaEspacosEmbranco(cadastroNome.getText())
+        // cadastra usuario no BD
+
+        String senhaA = String.valueOf(cadastroSenha.getPassword()); // convertendo texto da passwordField para String 
+        String senhaB = String.valueOf(cadastroConfirmarSenha.getPassword());
+
+        if (tf.verificaEspacosEmbranco(cadastroNome.getText()) //verificando se  todos os campos, exceto foto, estão preenchidos
                 && tf.verificaEspacosEmbranco(cadastroEmail.getText())
                 && tf.verificaEspacosEmbranco(cadastroConfirmarEmail.getText())
-                && tf.verificaEspacosEmbranco(String.valueOf(cadastroSenha.getPassword()))
-                && tf.verificaEspacosEmbranco(String.valueOf(cadastroConfirmarSenha.getPassword()))
+                && tf.verificaEspacosEmbranco(senhaA)
+                && tf.verificaEspacosEmbranco(senhaB)
                 && tf.verificaEspacosEmbranco(cadastroBairro.getText())
                 && tf.verificaEspacosEmbranco(cadastroTelefone.getText())) {
 
-            if (!(cadastroEmail.getText()).equals(cadastroConfirmarEmail.getText())) {
+            if (!(cadastroEmail.getText()).equals(cadastroConfirmarEmail.getText())) {//verifica se os campos email e  confirma email estão iguais
                 JOptionPane.showMessageDialog(this, "Os emails não conferem");
 
-            } else if (!senhaA.equals(senhaB)) {
+            } else if (!senhaA.equals(senhaB)) {// verificando se o campo senha e confirma senha estão iguais
                 JOptionPane.showMessageDialog(this, "As senhas não conferem");
             } else {
                 try {
-                    if (uDAO.checkEmail(cadastroEmail.getText())) {
-                        new Thread(t2).start();
+                    if (uDAO.checkEmail(cadastroEmail.getText())) { // verifica se o email ja esta cadastrado no BD, se não estiver continua
+
+                        new Thread(t2).start(); // mostra que cadastrou enquanto cadastra, para não ficar travado
+
+                        //guardando valores dos campos nos atributos do usuario
                         u.setNome(cadastroNome.getText());
                         u.setEmail(cadastroEmail.getText());
                         u.setSenha(String.valueOf(cadastroSenha.getPassword()));
@@ -450,6 +466,12 @@ public class Login extends javax.swing.JFrame {
                         u.setTelefone(cadastroTelefone.getText());
                         u.setUf((String) jComboBox1.getSelectedItem());
                         u.setCidade((String) jComboBox2.getSelectedItem());
+
+                        if (u.getFoto() == null) {// se foo for vazia coloca string vazia no atributo foto
+                            u.setFoto("");
+                        }
+
+                        //colocando valores vazios nos campos de cadastro
                         cadastroNome.setText("");
                         cadastroEmail.setText("");
                         cadastroConfirmarEmail.setText("");
@@ -457,8 +479,9 @@ public class Login extends javax.swing.JFrame {
                         cadastroConfirmarSenha.setText("");
                         cadastroBairro.setText("");
                         cadastroTelefone.setText("");
-                        uDAO.cadastrar(u);
-                    
+
+                        uDAO.cadastrar(u);//gravando no BD
+
                     } else {
                         JOptionPane.showMessageDialog(this, "Este email já esta cadastrado");
                     }
@@ -478,6 +501,70 @@ public class Login extends javax.swing.JFrame {
     private Runnable t2 = new Runnable() {
         public void run() {
             JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!!!");
+
+        }
+    };
+    private void botaoEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoEntrarActionPerformed
+        if (tf.verificaEspacosEmbranco(loginEmail.getText())
+                && tf.verificaEspacosEmbranco(String.valueOf(loginSenha.getPassword()))) { // verificando se os espaços estão preenchidos
+            try {
+                if (uDAO.login(loginEmail.getText(), String.valueOf(loginSenha.getPassword()))) {//verificando se as credenciais conferem com o BD
+                    JOptionPane.showMessageDialog(this, "Entrou");
+                    uDAO.constroiUser(u, loginEmail.getText());
+                    try {
+                        JOptionPane.showMessageDialog(null, ie.ConverterImagem(u));
+                    } catch (IOException ex) {
+                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "Usuário ou senha incorretos");
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Preencha todos os campos");
+        }
+
+    }//GEN-LAST:event_botaoEntrarActionPerformed
+
+    private void esqueciMinhaSenhaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_esqueciMinhaSenhaMouseClicked
+
+        new Thread(t3).start();//alterando senha paralelamente
+    }//GEN-LAST:event_esqueciMinhaSenhaMouseClicked
+
+    private Runnable t3 = new Runnable() {
+        public void run() {
+            String email = JOptionPane.showInputDialog(null, "Digite seu email:");
+
+            try {
+                if (uDAO.checkEmail(email) == false) {//verificando se email está cadastrado
+                    new Thread(t4).start();// mostrando que senha foi alterada e email enviado enquanto executa as mesmas
+                    int random = (int) (Math.random() * 1000 + 9999);// gerando senha aleatória
+                    String senhaNova = String.valueOf(random);
+                    uDAO.constroiUser(u, email);
+                    uDAO.alterarSenha(u, senhaNova); //alterando senha no BD 
+                    EmailSender es = new EmailSender();
+                    es.enviar("Redefinimos sua senha para:\n" + senhaNova + "\n é possivel redifir a senha depois que logar", email);//enviando nova senha para o email do usuario
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Email não cadastrado em nossa base de dados!");
+
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    };
+
+    private Runnable t4 = new Runnable() {
+        public void run() {
+            JOptionPane.showMessageDialog(null, "Uma nova senha foi enviada para seu email, isso pode demorar um pouco..");
 
         }
     };
