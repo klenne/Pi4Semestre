@@ -55,13 +55,13 @@ public class ImageEncoder {
 		if (!"".equals(foto)) {
 			img = decodeToImage(foto);
 			icon = new ImageIcon(img);
-			icone = new ImageIcon(icon.getImage().getScaledInstance(300, 400, 50));
+			icone = new ImageIcon(icon.getImage().getScaledInstance(128, 128, 50));
 			return icone;
 		} else {
 			foto = fotoGenerica;
 			img = decodeToImage(foto);
 			icon = new ImageIcon(img);
-			icone = new ImageIcon(icon.getImage().getScaledInstance(300, 400, 50));
+			icone = new ImageIcon(icon.getImage().getScaledInstance(128, 128, 50));
 			return icone;
 		}
 
