@@ -40,5 +40,17 @@ public class InstrucoesGenericas {
 		ConnectionFactory.closeConnection(con, stmt);
 
 	}
+        
+        
+        public static void deleta(String table,String campoPk,int valorPk) throws SQLException{
+        
+        Connection con = ConnectionFactory.getConnection();
+		String sql = "delete from "+table+" where "+campoPk+" = ?";
+		PreparedStatement stmt = con.prepareStatement(sql);
+		stmt.setInt(1, valorPk);
+		stmt.executeUpdate();
+		ConnectionFactory.closeConnection(con, stmt);
+        
+        }
 
 }
