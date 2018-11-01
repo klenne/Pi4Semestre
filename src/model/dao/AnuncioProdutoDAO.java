@@ -3,6 +3,8 @@ package model.dao;
 public class AnuncioProdutoDAO {
 
 	public void cadastraProduto() {
+            
+            
 		
 	}
 
@@ -11,15 +13,11 @@ public class AnuncioProdutoDAO {
 	
 	public void removerProduto() {}
 	
-	/*public list<Produtos> buscaPorFiltro(){}*/
 	
-public void adicionaFiltro() {
 	
-}
 
-public void adicionaFiltroRegião() {
-	
-}
+
+
 	
 	
 	

@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -32,7 +33,9 @@ public class ConnectionFactory {
 			Class.forName(DRIVER);
 			return DriverManager.getConnection(URL, USER, PASS);
 		} catch (ClassNotFoundException | SQLException ex) {
+                     JOptionPane.showMessageDialog(null, "Verifique sua conexão com a internet");
 			throw new RuntimeException("Erro na conexão: ", ex);
+                        
 		}
 	}
 

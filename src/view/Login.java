@@ -11,14 +11,14 @@ import model.bean.Usuario;
 import model.dao.CidadesEstadoDAO;
 import model.dao.UsuarioDAO;
 import utilitarios.ImageEncoder;
-import utilitarios.TextFormatter;
+import utilitarios.TextFormatterMensagens;
 
 public class Login extends javax.swing.JFrame {
 
     UsuarioDAO uDAO = new UsuarioDAO();
     Usuario u = new Usuario();
     ImageEncoder ie = new ImageEncoder();
-    TextFormatter tf = new TextFormatter();
+    TextFormatterMensagens tf = new TextFormatterMensagens();
     CidadesEstadoDAO ceDAO = new CidadesEstadoDAO();
 
     public Login() throws SQLException {
@@ -453,6 +453,7 @@ public class Login extends javax.swing.JFrame {
             } else if (!senhaA.equals(senhaB)) {// verificando se o campo senha e confirma senha estão iguais
                 JOptionPane.showMessageDialog(this, "As senhas não conferem");
             } else {
+                
                 try {
                     if (uDAO.checkEmail(cadastroEmail.getText())) { // verifica se o email ja esta cadastrado no BD, se não estiver continua
 
@@ -488,6 +489,7 @@ public class Login extends javax.swing.JFrame {
                 } catch (SQLException ex) {
                     Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                
 
             }
 
@@ -526,7 +528,7 @@ public class Login extends javax.swing.JFrame {
             }
 
         } else {
-            JOptionPane.showMessageDialog(this, "Preencha todos os campos");
+           
         }
 
     }//GEN-LAST:event_botaoEntrarActionPerformed
@@ -556,7 +558,8 @@ public class Login extends javax.swing.JFrame {
                 }
 
             } catch (SQLException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                
+            
             }
 
         }
