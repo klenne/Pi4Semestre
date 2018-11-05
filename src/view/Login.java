@@ -11,14 +11,14 @@ import model.bean.Usuario;
 import model.dao.CidadesEstadoDAO;
 import model.dao.UsuarioDAO;
 import utilitarios.ImageEncoder;
-import utilitarios.TextFormatterMensagens;
+import utilitarios.TextFormatter;
 
 public class Login extends javax.swing.JFrame {
 
     UsuarioDAO uDAO = new UsuarioDAO();
     Usuario u = new Usuario();
     ImageEncoder ie = new ImageEncoder();
-    TextFormatterMensagens tf = new TextFormatterMensagens();
+    TextFormatter tf = new TextFormatter();
     CidadesEstadoDAO ceDAO = new CidadesEstadoDAO();
 
     public Login() throws SQLException {

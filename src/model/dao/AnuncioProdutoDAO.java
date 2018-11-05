@@ -10,12 +10,12 @@ import java.util.List;
 import model.bean.AnuncioProduto;
 import model.bean.Usuario;
 
+
 public class AnuncioProdutoDAO {
 
-    InstrucoesGenericas ig;
     private final String TABLE = "ANUNCIO_PRODUTO", PK = "cod_anuncio";
 
-    public void cadastraAnuncio(AnuncioProduto ap, Usuario u) {// cadastrando produto
+    public void cadastraAnuncio(AnuncioProduto ap) {// cadastrando produto
 
         String InsereAnuncioProduto = "INSERT INTO  " + TABLE
                 + " (cod_usuario,tipo,titulo,console,valor,status,foto) VALUES(?,?,?,?,?,?,?)";
@@ -25,7 +25,7 @@ public class AnuncioProdutoDAO {
         try {
             // gravando anuncio do produto  no banco de dados
             stmt = con.prepareStatement(InsereAnuncioProduto);
-            stmt.setInt(1, u.getCodUsuario());
+            stmt.setInt(1, ap.getCodUsuario());
             stmt.setString(2, ap.getTipo());
             stmt.setString(3, ap.getTitulo());
             stmt.setString(4, ap.getConsole());
@@ -42,9 +42,9 @@ public class AnuncioProdutoDAO {
 
     }
 
-    public void constroiAnuncio(AnuncioProduto ap) {
-        String querryBusca = "select cod_usuario,tipo,titulo,console,valor,status,foto  from "
-                + TABLE + "  where cod_anuncio =?";
+    public void constroiAnuncio(AnuncioProduto ap, int codAnuncio) {
+        String querryBusca = "select cod_anuncio,cod_usuario,tipo,titulo,console,valor,status,foto  from "
+                + TABLE + "  where " + PK + " = ?";
 
         Connection con = ConnectionFactory.getConnection();
 
@@ -53,11 +53,12 @@ public class AnuncioProdutoDAO {
 
         try {
             stmt = con.prepareStatement(querryBusca);
-            stmt.setInt(1, ap.getCodAnuncio());
+            stmt.setInt(1, codAnuncio);
             rs = stmt.executeQuery();
 
             // construindo um objeto anuncioProduto
             rs.next();
+            ap.setCodAnuncio(rs.getInt("cod_anuncio"));
             ap.setCodUsuario(rs.getInt("cod_usuario"));
             ap.setTipo(rs.getString("tipo"));
             ap.setTitulo(rs.getString("titulo"));
@@ -78,30 +79,48 @@ public class AnuncioProdutoDAO {
         InstrucoesGenericas.altera(TABLE, "titulo", PK, ap.getTitulo(), ap.getCodAnuncio());
         InstrucoesGenericas.altera(TABLE, "console", PK, ap.getConsole(), ap.getCodAnuncio());
         InstrucoesGenericas.altera(TABLE, "valor", PK, ap.getValor(), ap.getCodAnuncio());
-        InstrucoesGenericas.altera(TABLE, "status", PK, ap.getStatus(), ap.getCodAnuncio());
         InstrucoesGenericas.altera(TABLE, "foto", PK, ap.getFoto(), ap.getCodAnuncio());
     }
 
-    public void removerAnuncio(AnuncioProduto ap) throws SQLException {
-        InstrucoesGenericas.deleta(TABLE, PK, ap.getCodAnuncio());
-    }
 
-    public List<AnuncioProduto> buscarAnuncios(String filtros) throws SQLException {
-        String sql = "select cod_anuncio,titulo,valor from " + TABLE + " where cod_anuncio is not null " + filtros;
+    public List<AnuncioProduto> buscarAnuncios(String filtros,String join,Usuario u) throws SQLException {//lista os anuncios, pode ter ou não filtros
+         String sql = "select ap.cod_anuncio,titulo,console,valor from " +TABLE+
+                 " as ap join USUARIO as u on ap.cod_usuario=u.cod_usuario "+join
+                 + " where not ap.cod_usuario= ? "+filtros;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Connection con = ConnectionFactory.getConnection();
+        stmt = con.prepareStatement(sql);
+        stmt.setInt(1, u.getCodUsuario());
         List<AnuncioProduto> anuncios = new ArrayList<>();
         rs = stmt.executeQuery();
         while (rs.next()) {
             AnuncioProduto ap = new AnuncioProduto();
             ap.setCodAnuncio(rs.getInt("cod_anuncio"));
             ap.setTitulo(rs.getString("titulo"));
+            ap.setConsole(rs.getString("console"));
             ap.setValor(rs.getString("valor"));
             anuncios.add(ap);
         }
         ConnectionFactory.closeConnection(con, stmt, rs);
         return anuncios;
+    }
+
+    public void removerAnuncio(AnuncioProduto ap) throws SQLException {
+        InstrucoesGenericas.deleta(TABLE, PK, ap.getCodAnuncio());
+    }
+
+    public void mudarStatusParaTrocado(AnuncioProduto ap) throws SQLException {
+        InstrucoesGenericas.altera(TABLE, "status", PK, "TROCADO", ap.getCodAnuncio());
+    }
+
+    public void mudarStatusParaVendido(AnuncioProduto ap) throws SQLException {
+        InstrucoesGenericas.altera(TABLE, "status", PK, "VENDIDO", ap.getCodAnuncio());
+
+    }
+
+    public void mudarStatusParaDoado(AnuncioProduto ap) throws SQLException {
+        InstrucoesGenericas.altera(TABLE, "status", PK, "DOADO", ap.getCodAnuncio());
     }
 
 }

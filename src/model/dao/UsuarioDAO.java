@@ -11,7 +11,6 @@ public class UsuarioDAO {// Usuario Data Acess Object
 
     // objeto com métodos que realizam instruções sql genéricas, para evitar
     // repetição de código
-    InstrucoesGenericas ig;
     private final String TABLE = "USUARIO", PK = "cod_usuario";
 
     public void cadastrar(Usuario u) {

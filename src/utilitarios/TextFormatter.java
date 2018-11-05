@@ -1,8 +1,8 @@
 package utilitarios;
 
-import javax.swing.JOptionPane;
 
-public class TextFormatterMensagens {
+
+public class TextFormatter {
 	
 	public boolean verificaEspacosEmbranco(String texto) {
 		
