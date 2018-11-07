@@ -48,7 +48,7 @@ public class TesteFiltro {
         }
         
         
-        System.out.println(f.filtroParaString());
+        System.out.println(f.filtrosParaString());
         
         
         

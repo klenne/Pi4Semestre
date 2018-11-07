@@ -24,11 +24,7 @@ public class TesteAnuncio {
         AnuncioProdutoDAO apDAO = new AnuncioProdutoDAO();
         f.filtroRequisito("RED DEAD");
         
-        for(AnuncioProduto ap : apDAO.buscarAnuncios(f.filtrosParaString(),f.joinRequisito(), u)){
-                System.out.println("Titulo: "+ap.getTitulo());
-                System.out.println("Codigo Anuncio: "+ ap.getCodAnuncio());
-        
-        }
+     
         
         
         

@@ -38,7 +38,7 @@ public class Filtros {// classe para adicionar filtros para as buscas de anuncio
         
     }
     public void filtroConsole(String console) {
-        filtrosMostrar[1]="No console: " + console;
+        filtrosMostrar[1]="No console: " + console.toUpperCase();
         filtrosSql[1]="and ap.console = '" + console.toUpperCase() + "' ";
         
     }
@@ -48,10 +48,15 @@ public class Filtros {// classe para adicionar filtros para as buscas de anuncio
         filtrosSql[2]="and r.interesse_em like '%" + requisito.toUpperCase() + "%' ";
         
     }
-    public void filtroTipo(String tipo){
-       filtrosMostrar[3]="Tipo: " + tipo;
-        filtrosSql[3]="and ap.tipo = '" + tipo.toUpperCase() + "' ";
+    public void filtroCategoria(String categoria){
+       filtrosMostrar[3]="Categoria: " + categoria;
+        filtrosSql[3]="and ap.tipo = '" + categoria + "' ";
     }
+        public void filtroValor(String valor){
+       filtrosMostrar[4]="Tipo transacão: " + valor;
+        filtrosSql[4]="and ap.valor = '" + valor + "' ";
+    }
+    
 
     public void removerFiltro(int index) {
         filtrosMostrar[index]="";

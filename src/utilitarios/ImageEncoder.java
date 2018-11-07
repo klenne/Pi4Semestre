@@ -12,6 +12,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import Decoder.BASE64Decoder;
 import Decoder.BASE64Encoder;
+import model.bean.AnuncioProduto;
 import model.bean.Usuario;
 
 public class ImageEncoder {
@@ -66,7 +67,49 @@ public class ImageEncoder {
 		}
 
 	}
+        public Icon ConverterImagem(AnuncioProduto ap) throws IOException {
+		// converte bufferedImage  para icon
+		String foto = ap.getFoto();
+		BufferedImage img = null;
+		ImageIcon icon;
+		Icon icone;
 
+		if (!"".equals(foto)) {
+			img = decodeToImage(foto);
+			icon = new ImageIcon(img);
+			icone = new ImageIcon(icon.getImage().getScaledInstance(250, 250, 50));
+			return icone;
+		} else {
+                    foto = fotoGenerica;
+			img = decodeToImage(foto);
+			icon = new ImageIcon(img);
+			icone = new ImageIcon(icon.getImage().getScaledInstance(250,250, 50));
+			return icone;
+		}
+
+	}
+
+               public Icon ConverterImagemAnuncio(AnuncioProduto ap) throws IOException {
+		// converte bufferedImage  para icon
+		String foto = ap.getFoto();
+		BufferedImage img = null;
+		ImageIcon icon;
+		Icon icone;
+
+		if (!"".equals(foto)) {
+			img = decodeToImage(foto);
+			icon = new ImageIcon(img);
+			icone = new ImageIcon(icon.getImage().getScaledInstance(128, 90, 50));
+			return icone;
+		} else {
+			foto = fotoGenerica;
+			img = decodeToImage(foto);
+			icon = new ImageIcon(img);
+			icone = new ImageIcon(icon.getImage().getScaledInstance(128,90, 50));
+			return icone;
+		}
+
+	}
 	public static String encodeToString(BufferedImage image) {
 	// encodar para string base 64{
 		String imageString = null;

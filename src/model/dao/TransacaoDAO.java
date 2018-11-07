@@ -50,7 +50,7 @@ public class TransacaoDAO {
     public List<Transacao> listarMinhasTransacoes(String tipoBusca, Usuario u) throws SQLException {// lista as transacoes que usuario realizou
 
         String sql = "select t.cod_transacao, t.cod_anuncio,ap.titulo,t.status,t.data from TRANSACAO"
-                + " as t join ANUNCIO_PRODUTO as ap on t.cod_anuncio = ap.cod_anuncio where t.cod_usuario= ? and t.status = ?";
+                + " as t join ANUNCIO_PRODUTO as ap on t.cod_anuncio = ap.cod_anuncio where t.cod_usuario= ? and t.status = ? and ap.status='ATIVO'";
         PreparedStatement stmt = null;
         Connection con = ConnectionFactory.getConnection();
         stmt = con.prepareStatement(sql);
@@ -92,7 +92,7 @@ public class TransacaoDAO {
 
         String sql = "select u.nome,t.cod_transacao,t.cod_anuncio,ap.titulo,t.data from TRANSACAO as t join ANUNCIO_PRODUTO as ap on t.cod_anuncio=ap.cod_anuncio "
                 + " join USUARIO as u on t.cod_usuario = u.cod_usuario "
-                + " where ap.cod_usuario =? and t.status=?";
+                + " where ap.cod_usuario =? and t.status=? and ap.status='ATIVO'";
         PreparedStatement stmt = null;
         Connection con = ConnectionFactory.getConnection();
         stmt = con.prepareStatement(sql);

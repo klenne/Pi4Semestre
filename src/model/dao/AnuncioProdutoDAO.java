@@ -63,6 +63,7 @@ public class AnuncioProdutoDAO {
             ap.setTipo(rs.getString("tipo"));
             ap.setTitulo(rs.getString("titulo"));
             ap.setConsole(rs.getString("console"));
+            ap.setValor(rs.getString("valor"));
             ap.setStatus(rs.getString("status"));
             ap.setFoto(rs.getString("foto"));
 
@@ -83,10 +84,23 @@ public class AnuncioProdutoDAO {
     }
 
 
-    public List<AnuncioProduto> buscarAnuncios(String filtros,String join,Usuario u) throws SQLException {//lista os anuncios, pode ter ou não filtros
-         String sql = "select ap.cod_anuncio,titulo,console,valor from " +TABLE+
+    public List<AnuncioProduto> buscarAnuncios(String filtros,String join,Usuario u,String tipoBusca) throws SQLException {//lista os anuncios, pode ter ou não filtros
+         
+        
+        String sql="";
+        switch(tipoBusca){
+            case "OUTROS":
+                sql= "select ap.cod_anuncio,titulo,console,valor from " +TABLE+
                  " as ap join USUARIO as u on ap.cod_usuario=u.cod_usuario "+join
-                 + " where not ap.cod_usuario= ? "+filtros;
+                 + " where not ap.cod_usuario= ? and ap.status='ATIVO' "+filtros;
+                break;
+            case "MEUS":
+                sql = "select ap.cod_anuncio,titulo,console,valor from " +TABLE+
+                 " as ap join USUARIO as u on ap.cod_usuario=u.cod_usuario "+join
+                 + " where  ap.cod_usuario= ? and ap.status='ATIVO' "+filtros;
+                break;
+                
+        }
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Connection con = ConnectionFactory.getConnection();
@@ -122,5 +136,9 @@ public class AnuncioProdutoDAO {
     public void mudarStatusParaDoado(AnuncioProduto ap) throws SQLException {
         InstrucoesGenericas.altera(TABLE, "status", PK, "DOADO", ap.getCodAnuncio());
     }
+    public void mudarStatusParaEncerado(AnuncioProduto ap) throws SQLException {
+        InstrucoesGenericas.altera(TABLE, "status", PK, "ENCERRADO", ap.getCodAnuncio());
+    }
+
 
 }
