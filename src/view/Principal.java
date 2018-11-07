@@ -5,6 +5,8 @@
  */
 package view;
 
+
+import grafico.AnunciosAtivosEEncerrados;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ import model.dao.Filtros;
 import model.dao.RequisitoDAO;
 import model.dao.TransacaoDAO;
 import model.dao.UsuarioDAO;
+
 import utilitarios.ImageEncoder;
 import utilitarios.TextFormatter;
 
@@ -47,7 +50,7 @@ public class Principal extends javax.swing.JFrame {
     List<AnuncioProduto> apListMeusProdutos = new ArrayList();
     List<Requisito> apListMeusRequisitos = new ArrayList();
     List<Transacao> apListMeusInteresses = new ArrayList();
-        List<Transacao> apListInteressesMeusProdutos = new ArrayList();
+    List<Transacao> apListInteressesMeusProdutos = new ArrayList();
     boolean join = false;
     boolean controleTipoAnuncio = true;
     boolean controleCategoriaAnuncio = true;
@@ -67,6 +70,8 @@ public class Principal extends javax.swing.JFrame {
         preenchertabelaMeusAnuncios();
         preencherTabelaMeusInteresses();
         preencherTabelaInteressesEmMeusProdutos();
+ 
+       
     }
 
     public void montaLista() {
@@ -214,7 +219,6 @@ public class Principal extends javax.swing.JFrame {
         jButtonAbrirTransacao = new javax.swing.JButton();
         jButtonRemoverTransacao = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
@@ -222,6 +226,8 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jCheckBoxMenuGraficoEntradaSaida = new javax.swing.JCheckBoxMenuItem();
 
         jLabelFoto1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelFoto1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/Imagens/teste.jpg"))); // NOI18N
@@ -846,19 +852,6 @@ public class Principal extends javax.swing.JFrame {
 
         Abas.addTab("Interesses", jPanel1);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1028, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 568, Short.MAX_VALUE)
-        );
-
-        Abas.addTab("Estatisticas", jPanel3);
-
         jMenu4.setText("Sobre nós");
 
         jMenuItem3.setText("Equipe");
@@ -883,6 +876,19 @@ public class Principal extends javax.swing.JFrame {
         jMenu1.add(jMenuItem5);
 
         jMenuBar2.add(jMenu1);
+
+        jMenu2.setText("Estatísticas");
+
+        jCheckBoxMenuGraficoEntradaSaida.setSelected(true);
+        jCheckBoxMenuGraficoEntradaSaida.setText("Anúncios ativos e encerrados");
+        jCheckBoxMenuGraficoEntradaSaida.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuGraficoEntradaSaidaActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jCheckBoxMenuGraficoEntradaSaida);
+
+        jMenuBar2.add(jMenu2);
 
         setJMenuBar(jMenuBar2);
 
@@ -912,6 +918,16 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jLabelFoto1MouseClicked
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        String novaSenha=JOptionPane.showInputDialog("Digite sua Nova senha: ");
+        JOptionPane.showMessageDialog(null,"Senha Alterada com sucesso!");
+        try {
+            uDAO.alterarSenha(u, novaSenha);
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         try {
             preencherTabelaInteressesEmMeusProdutos();
@@ -919,7 +935,6 @@ public class Principal extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButtonRemoverTransacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoverTransacaoActionPerformed
@@ -931,7 +946,6 @@ public class Principal extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }//GEN-LAST:event_jButtonRemoverTransacaoActionPerformed
 
     private void jButtonAbrirTransacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAbrirTransacaoActionPerformed
@@ -946,7 +960,6 @@ public class Principal extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }//GEN-LAST:event_jButtonAbrirTransacaoActionPerformed
 
     private void jButtonVerMeuAnuncioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVerMeuAnuncioActionPerformed
@@ -1054,7 +1067,6 @@ public class Principal extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(null, "Campo Vazio");
         }
-
     }//GEN-LAST:event_jButtonAdicionarRequisitoActionPerformed
 
     private void jButtonFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFotoActionPerformed
@@ -1069,7 +1081,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void jButtonEncerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEncerrarActionPerformed
         try {
-            // TODO add your handling code here:
+            
             int selectedRowIndex = jTableMeusProdutos.getSelectedRow();
             ap.setCodUsuario(u.getCodUsuario());
             ap = apListMeusProdutos.get(selectedRowIndex);
@@ -1272,15 +1284,18 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonBuscarActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        String novaSenha=JOptionPane.showInputDialog("Digite sua Nova senha: ");
-        JOptionPane.showMessageDialog(null,"Senha Alterada com sucesso!");
+    private void jCheckBoxMenuGraficoEntradaSaidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuGraficoEntradaSaidaActionPerformed
+        AnunciosAtivosEEncerrados p;
         try {
-            uDAO.alterarSenha(u, novaSenha);
+            p = new AnunciosAtivosEEncerrados();
+             p.setLocationRelativeTo(null);
+        p.setVisible(true);
+        p.setResizable(false);
         } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+            
+    }//GEN-LAST:event_jCheckBoxMenuGraficoEntradaSaidaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1339,6 +1354,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton jButtonVerAnuncio;
     private javax.swing.JButton jButtonVerMeuAnuncio;
     private javax.swing.JButton jButtoncadastrarAnuncio;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuGraficoEntradaSaida;
     private javax.swing.JComboBox<String> jComboBoxCategoria;
     private javax.swing.JComboBox<String> jComboBoxFiltroCategoria;
     private javax.swing.JComboBox<String> jComboBoxTipoTransacao;
@@ -1365,6 +1381,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelValor;
     private javax.swing.JList<String> jListFiltros;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
@@ -1372,7 +1389,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane6;

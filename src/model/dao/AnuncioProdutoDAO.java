@@ -139,6 +139,26 @@ public class AnuncioProdutoDAO {
     public void mudarStatusParaEncerado(AnuncioProduto ap) throws SQLException {
         InstrucoesGenericas.altera(TABLE, "status", PK, "ENCERRADO", ap.getCodAnuncio());
     }
+    
+    public int contaAnunciosAtivos() throws SQLException{
+            Connection con = ConnectionFactory.getConnection();
+        String sql = "select count(cod_anuncio) as ativos from " +TABLE+ " where status='ATIVO'";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery();
+        rs.next();
+        int result = Integer.parseInt(rs.getString("ativos"));
+        return result;
+    
+    }
 
-
+    public int contaAnunciosEncerrados() throws SQLException{
+            Connection con = ConnectionFactory.getConnection();
+        String sql = "select count(cod_anuncio) as encerrados from "+TABLE+ " where status='VENDIDO'";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery();
+        rs.next();
+        int result = Integer.parseInt(rs.getString("encerrados"));
+        return result;
+    
+    }
 }
