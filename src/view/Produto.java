@@ -6,42 +6,47 @@
 package view;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import model.bean.AnuncioProduto;
+import model.bean.Transacao;
 import model.dao.AnuncioProdutoDAO;
+import model.dao.TransacaoDAO;
 import utilitarios.ImageEncoder;
 
-/**
- *
- * @author user
- */
 public class Produto extends javax.swing.JFrame {
-    AnuncioProdutoDAO apDAO=new AnuncioProdutoDAO();
-    AnuncioProduto ap=new AnuncioProduto();
+
+    AnuncioProdutoDAO apDAO = new AnuncioProdutoDAO();
+    AnuncioProduto ap = new AnuncioProduto();
     int codUsuario;
-    ImageEncoder ie=new ImageEncoder();
-  
+    ImageEncoder ie = new ImageEncoder();
+    Transacao t = new Transacao();
+    TransacaoDAO tDAO = new TransacaoDAO();
+    
     public Produto() {
         initComponents();
     }
     
-    
-    public void enviaPalavra2(Principal p,int codAnuncio,int codUsuario){
-    apDAO.constroiAnuncio(ap, codAnuncio);
-    this.codUsuario=codUsuario;
-    jLabelNome.setText(ap.getTitulo());
-    jLabelConsole.setText(ap.getConsole());
-    jLabelValor.setText(ap.getValor());
+    public void enviaPalavra2(Principal p, int codAnuncio, int codUsuario) {
+        apDAO.constroiAnuncio(ap, codAnuncio);
+        this.codUsuario = codUsuario;
+        jLabelNome.setText(ap.getTitulo());
+        jLabelConsole.setText(ap.getConsole());
+        jLabelValor.setText(ap.getValor());
+        t.setCodAnuncio(codAnuncio);
+        t.setCodUsuario(codUsuario);
+        
         try {
             jLabelFoto.setIcon(ie.ConverterImagem(ap));
         } catch (IOException ex) {
             Logger.getLogger(Produto.class.getName()).log(Level.SEVERE, null, ex);
         }
-    
-    
-    
+        
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -60,7 +65,7 @@ public class Produto extends javax.swing.JFrame {
         jLabelValor = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jButtonInteresse = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -101,9 +106,19 @@ public class Produto extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jButton1.setText("Voltar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
-        jButton2.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        jButton2.setText("Tenho interesse");
+        jButtonInteresse.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jButtonInteresse.setText("Tenho interesse");
+        jButtonInteresse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonInteresseActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -115,7 +130,7 @@ public class Produto extends javax.swing.JFrame {
                         .addGap(150, 150, 150)
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 280, Short.MAX_VALUE)
-                        .addComponent(jButton2))
+                        .addComponent(jButtonInteresse))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -159,12 +174,32 @@ public class Produto extends javax.swing.JFrame {
                 .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButtonInteresse))
                 .addContainerGap(43, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButtonInteresseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInteresseActionPerformed
+        try {
+            if (tDAO.checkTransacao(codUsuario,ap.getCodAnuncio())) {
+                     tDAO.gravaTransacao(t);
+                     this.dispose();
+            } else {
+                
+                   JOptionPane.showMessageDialog(null, "Você já tem interesse nesse produto ");
+            }
+            
+        } catch (SQLException | ParseException ex) {
+            Logger.getLogger(Produto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_jButtonInteresseActionPerformed
 
     /**
      * @param args the command line arguments
@@ -203,7 +238,7 @@ public class Produto extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButtonInteresse;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel8;

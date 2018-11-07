@@ -81,6 +81,37 @@ public class UsuarioDAO {// Usuario Data Acess Object
         }
 
     }
+        public void constroiContato(Usuario u, int codUsuario) {
+       
+
+        // instrução SQL
+        String querryBusca = "select nome,email,telefone  from " + TABLE
+                + "  where cod_usuario=?";
+
+        Connection con = ConnectionFactory.getConnection();
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            stmt = con.prepareStatement(querryBusca);
+            stmt.setInt(1, codUsuario);
+            rs = stmt.executeQuery();
+
+            // construindo um objeto usuario
+            rs.next();
+            u.setEmail(rs.getString("email"));
+            u.setNome(rs.getString("nome"));
+            u.setTelefone(rs.getString("telefone"));
+         
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+
+    }
 
     public boolean login(String email, String senha) throws SQLException {
         /*

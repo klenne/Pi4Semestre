@@ -16,10 +16,12 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.bean.AnuncioProduto;
 import model.bean.Requisito;
+import model.bean.Transacao;
 import model.bean.Usuario;
 import model.dao.AnuncioProdutoDAO;
 import model.dao.Filtros;
 import model.dao.RequisitoDAO;
+import model.dao.TransacaoDAO;
 import model.dao.UsuarioDAO;
 import utilitarios.ImageEncoder;
 import utilitarios.TextFormatter;
@@ -33,7 +35,9 @@ public class Principal extends javax.swing.JFrame {
     UsuarioDAO uDAO = new UsuarioDAO();
     AnuncioProdutoDAO apDAO = new AnuncioProdutoDAO();
     RequisitoDAO rDAO = new RequisitoDAO();
+    TransacaoDAO tDAO=new TransacaoDAO();
     AnuncioProduto ap = new AnuncioProduto();
+    Transacao t=new Transacao();
     Usuario u = new Usuario();
     Requisito r = new Requisito();
     Filtros f = new Filtros();
@@ -42,6 +46,8 @@ public class Principal extends javax.swing.JFrame {
     List<AnuncioProduto> apList = new ArrayList();
     List<AnuncioProduto> apListMeusProdutos = new ArrayList();
     List<Requisito> apListMeusRequisitos = new ArrayList();
+    List<Transacao> apListMeusInteresses = new ArrayList();
+        List<Transacao> apListInteressesMeusProdutos = new ArrayList();
     boolean join = false;
     boolean controleTipoAnuncio = true;
     boolean controleCategoriaAnuncio = true;
@@ -59,6 +65,8 @@ public class Principal extends javax.swing.JFrame {
         uDAO.constroiUser(u, email);
         ap.setCodUsuario(u.getCodUsuario());
         preenchertabelaMeusAnuncios();
+        preencherTabelaMeusInteresses();
+        preencherTabelaInteressesEmMeusProdutos();
     }
 
     public void montaLista() {
@@ -99,6 +107,35 @@ public class Principal extends javax.swing.JFrame {
         }
 
     }
+    
+    public void preencherTabelaMeusInteresses() throws SQLException{
+        apListMeusInteresses=tDAO.listarMinhasTransacoes("INTERESSE", u);
+         DefaultTableModel modelo = (DefaultTableModel) jTableMeusInteresses.getModel();
+        modelo.setNumRows(0);
+        for (Transacao tr : apListMeusInteresses) {
+            modelo.addRow(new Object[]{
+                
+                tr.getCodAnuncio(),tr.getCodTransacao(),tr.getTitulo(),tr.getData()
+            });
+        }
+
+    
+    
+    }
+        public void preencherTabelaInteressesEmMeusProdutos() throws SQLException{
+        apListInteressesMeusProdutos=tDAO.listarInteracoesComMeusAnuncios("INTERESSE", u);
+         DefaultTableModel modelo = (DefaultTableModel) jTableInteressadosMeusProdutos.getModel();
+        modelo.setNumRows(0);
+        for (Transacao tr : apListInteressesMeusProdutos) {
+            modelo.addRow(new Object[]{
+                
+                tr.getNome(),tr.getCodTransacao(),tr.getTitulo(),tr.getData()
+            });
+        }
+
+    
+    
+    }
 
     public void limparCampoCadastroAnuncio() {
         jTextFieldTitulo.setText("");
@@ -113,6 +150,7 @@ public class Principal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabelFoto1 = new javax.swing.JLabel();
         Abas = new javax.swing.JTabbedPane();
         abaPesquisa = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -168,22 +206,33 @@ public class Principal extends javax.swing.JFrame {
         jButtonVerMeuAnuncio = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane7 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        jTableMeusInteresses = new javax.swing.JTable();
         jLabel42 = new javax.swing.JLabel();
         jScrollPane9 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
+        jTableInteressadosMeusProdutos = new javax.swing.JTable();
         jLabel15 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        jButtonAbrirTransacao = new javax.swing.JButton();
+        jButtonRemoverTransacao = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
+
+        jLabelFoto1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelFoto1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/Imagens/teste.jpg"))); // NOI18N
+        jLabelFoto1.setText("<html>\n<PRE>\n\n\n\n\n\n\n\n\n\n\n\n\n\n<p>Pressione para adicionar uma foto</p>\n</PRE>\n\n\n</html>");
+        jLabelFoto1.setToolTipText("");
+        jLabelFoto1.setPreferredSize(new java.awt.Dimension(200, 200));
+        jLabelFoto1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelFoto1MouseClicked(evt);
+            }
+        });
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -697,48 +746,57 @@ public class Principal extends javax.swing.JFrame {
 
         Abas.addTab("Meus Produtos", abaAnunciar);
 
-        jTable2.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        jTableMeusInteresses.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        jTableMeusInteresses.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Código anúncio", "Código Transacão", "Título", "Data"
             }
         ));
-        jScrollPane7.setViewportView(jTable2);
+        jScrollPane7.setViewportView(jTableMeusInteresses);
 
         jLabel42.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel42.setText("Produtos que tenho interesse");
 
-        jTable4.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+        jTableInteressadosMeusProdutos.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        jTableInteressadosMeusProdutos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Nome", "Código Transação", "Título", "Data"
             }
         ));
-        jScrollPane9.setViewportView(jTable4);
+        jScrollPane9.setViewportView(jTableInteressadosMeusProdutos);
 
         jLabel15.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel15.setText("Meus produtos com interesses");
 
-        jButton6.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        jButton6.setText("ABRIR");
+        jButtonAbrirTransacao.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jButtonAbrirTransacao.setText("ABRIR");
+        jButtonAbrirTransacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAbrirTransacaoActionPerformed(evt);
+            }
+        });
 
-        jButton7.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        jButton7.setText("REMOVER");
+        jButtonRemoverTransacao.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jButtonRemoverTransacao.setText("REMOVER");
+        jButtonRemoverTransacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRemoverTransacaoActionPerformed(evt);
+            }
+        });
 
         jButton10.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jButton10.setText("Atualizar Página");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -754,9 +812,9 @@ public class Principal extends javax.swing.JFrame {
                             .addComponent(jLabel15))
                         .addGap(386, 801, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton6)
+                        .addComponent(jButtonAbrirTransacao)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton7)
+                        .addComponent(jButtonRemoverTransacao)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -775,8 +833,8 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton6)
-                    .addComponent(jButton7))
+                    .addComponent(jButtonAbrirTransacao)
+                    .addComponent(jButtonRemoverTransacao))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addComponent(jLabel15)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -787,19 +845,6 @@ public class Principal extends javax.swing.JFrame {
         );
 
         Abas.addTab("Interesses", jPanel1);
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1028, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 568, Short.MAX_VALUE)
-        );
-
-        Abas.addTab("Alterar Dados", jPanel2);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -822,6 +867,14 @@ public class Principal extends javax.swing.JFrame {
         jMenuBar2.add(jMenu4);
 
         jMenu1.setText("Help");
+
+        jMenuItem1.setText("Alterar Senha");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
 
         jMenuItem4.setText("Como Usar");
         jMenu1.add(jMenuItem4);
@@ -849,6 +902,300 @@ public class Principal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jLabelFoto1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelFoto1MouseClicked
+
+        u.setFoto(ie.lerImagem());  // abre um jchooser para escolher uma foto e converte bara base64 guardando no atributo foto de usuario
+        try {
+            jLabelFoto.setIcon(ie.ConverterImagem(u));
+        } catch (IOException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jLabelFoto1MouseClicked
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        try {
+            preencherTabelaInteressesEmMeusProdutos();
+            preencherTabelaMeusInteresses();
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButtonRemoverTransacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoverTransacaoActionPerformed
+        int selectedRowIndex = jTableMeusInteresses.getSelectedRow();
+        t=apListMeusInteresses.get(selectedRowIndex);
+        try {
+            tDAO.deletarTransacao(t);
+            preencherTabelaMeusInteresses();
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jButtonRemoverTransacaoActionPerformed
+
+    private void jButtonAbrirTransacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAbrirTransacaoActionPerformed
+        int selectedRowIndex = jTableMeusInteresses.getSelectedRow();
+        t=apListMeusInteresses.get(selectedRowIndex);
+        MeusInteresses mI=new MeusInteresses();
+        mI.setLocationRelativeTo(null);
+        mI.setVisible(true);
+        mI.setResizable(false);
+        try {
+            mI.enviaPalavra3(this, t.getCodAnuncio());
+        } catch (IOException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jButtonAbrirTransacaoActionPerformed
+
+    private void jButtonVerMeuAnuncioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVerMeuAnuncioActionPerformed
+        int selectedRowIndex = jTableMeusProdutos.getSelectedRow();
+        ap.setCodUsuario(u.getCodUsuario());
+        ap = apListMeusProdutos.get(selectedRowIndex);
+        apDAO.constroiAnuncio(ap, ap.getCodAnuncio());
+        if (ap.getTipo().equals("JOGO")) {
+            jTextFieldConsoleCadastro.setText(ap.getConsole());
+            jComboBoxCategoria.setSelectedIndex(0);
+
+        } else if (ap.getTipo().equals("CONSOLE")) {
+            jComboBoxCategoria.setSelectedIndex(1);
+        } else {
+            jComboBoxCategoria.setSelectedIndex(2);
+        }
+        if (ap.getValor().equals("VENDA")) {
+            jTextFieldValor.setText(ap.getValor());
+            jComboBoxTipoTransacao.setSelectedIndex(0);
+
+        } else if (ap.getValor().equals("TROCA")) {
+            jComboBoxTipoTransacao.setSelectedIndex(1);
+        } else {
+            jComboBoxTipoTransacao.setSelectedIndex(2);
+        }
+
+        jTextFieldTitulo.setText(ap.getTitulo());
+        try {
+            jLabelFoto.setIcon(ie.ConverterImagemAnuncio(ap));
+            preenchertabelaRequisitos();
+        } catch (IOException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonVerMeuAnuncioActionPerformed
+
+    private void jComboBoxCategoriaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxCategoriaItemStateChanged
+
+        String valor = (String) jComboBoxCategoria.getSelectedItem();
+        if (valor.equals("JOGO")) {
+            controleCategoriaAnuncio = true;
+            jLabelConsole.setVisible(true);
+            jTextFieldConsoleCadastro.setVisible(true);
+        } else {
+            controleCategoriaAnuncio = false;
+            jLabelConsole.setVisible(false);
+            jTextFieldConsoleCadastro.setVisible(false);
+            jTextFieldConsoleCadastro.setText("");
+        }
+    }//GEN-LAST:event_jComboBoxCategoriaItemStateChanged
+
+    private void jButtonLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLimparActionPerformed
+        try {
+            ap.setCodAnuncio(0);
+            preenchertabelaRequisitos();
+            limparCampoCadastroAnuncio();
+            preenchertabelaMeusAnuncios();
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonLimparActionPerformed
+
+    private void jComboBoxTipoTransacaoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxTipoTransacaoItemStateChanged
+        String valor = (String) jComboBoxTipoTransacao.getSelectedItem();
+        if (valor.equals("VENDA")) {
+            controleTipoAnuncio = true;
+            jLabelValor.setVisible(true);
+            jTextFieldValor.setVisible(true);
+        } else {
+            controleTipoAnuncio = false;
+            jLabelValor.setVisible(false);
+            jTextFieldValor.setVisible(false);
+            jTextFieldValor.setText("");
+        }
+    }//GEN-LAST:event_jComboBoxTipoTransacaoItemStateChanged
+
+    private void jButtonRemoveRequisitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveRequisitoActionPerformed
+        int selectedRowIndex = jTableRequisitos.getSelectedRow();
+        r=apListMeusRequisitos.get(selectedRowIndex);
+        try {
+            rDAO.apagarRequisito(r);
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            preenchertabelaRequisitos();
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonRemoveRequisitoActionPerformed
+
+    private void jButtonAdicionarRequisitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarRequisitoActionPerformed
+        int selectedRowIndex = jTableMeusProdutos.getSelectedRow();
+        ap = apListMeusProdutos.get(selectedRowIndex);
+
+        if (tf.verificaEspacosEmbranco(jTextFieldInteresse.getText())) {
+            r.setInteresseEm(jTextFieldInteresse.getText().toUpperCase());
+            rDAO.adicionarRequisito(r, ap);
+            try {
+                preenchertabelaRequisitos();
+            } catch (SQLException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Campo Vazio");
+        }
+
+    }//GEN-LAST:event_jButtonAdicionarRequisitoActionPerformed
+
+    private void jButtonFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFotoActionPerformed
+
+        ap.setFoto(ie.lerImagem());
+        try {
+            jLabelFoto.setIcon(ie.ConverterImagemAnuncio(ap));
+        } catch (IOException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonFotoActionPerformed
+
+    private void jButtonEncerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEncerrarActionPerformed
+        try {
+            // TODO add your handling code here:
+            int selectedRowIndex = jTableMeusProdutos.getSelectedRow();
+            ap.setCodUsuario(u.getCodUsuario());
+            ap = apListMeusProdutos.get(selectedRowIndex);
+            try {
+                apDAO.mudarStatusParaVendido(ap);
+            } catch (SQLException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            preenchertabelaMeusAnuncios();
+            limparCampoCadastroAnuncio();
+            ap.setCodAnuncio(0);
+            preenchertabelaRequisitos();
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonEncerrarActionPerformed
+
+    private void jButtonAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAlterarActionPerformed
+
+        int selectedRowIndex = jTableMeusProdutos.getSelectedRow();
+        ap.setCodUsuario(u.getCodUsuario());
+        ap = apListMeusProdutos.get(selectedRowIndex);
+        String valor = (String) jComboBoxTipoTransacao.getSelectedItem();
+        if (tf.verificaEspacosEmbranco(jTextFieldTitulo.getText())) {
+            ap.setConsole(jTextFieldConsoleCadastro.getText().toUpperCase());
+            ap.setTitulo(jTextFieldTitulo.getText().toUpperCase());
+            ap.setTipo((String) jComboBoxCategoria.getSelectedItem());
+            switch (valor) {
+                case "VENDA":
+                if (tf.verificaEspacosEmbranco(jTextFieldValor.getText())) {
+                    ap.setValor(jTextFieldValor.getText());
+                    try {
+                        apDAO.alterarAnuncio(ap);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Campo Valor vazio");
+                }
+                break;
+                case "TROCA":
+                ap.setValor("TROCA");
+                {
+                    try {
+                        apDAO.alterarAnuncio(ap);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                break;
+                case "DOACAO":
+                ap.setValor("DOACAO");
+                {
+                    try {
+                        apDAO.alterarAnuncio(ap);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                break;
+            }
+
+            try {
+                apDAO.alterarAnuncio(ap);
+            } catch (SQLException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Preencha todos os campos");
+        }
+
+        limparCampoCadastroAnuncio();
+        try {
+            ap.setCodAnuncio(0);
+            preenchertabelaMeusAnuncios();
+            preenchertabelaRequisitos();
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonAlterarActionPerformed
+
+    private void jButtoncadastrarAnuncioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtoncadastrarAnuncioActionPerformed
+        String valor = (String) jComboBoxTipoTransacao.getSelectedItem();
+        ap.setCodUsuario(u.getCodUsuario());
+        if (tf.verificaEspacosEmbranco(jTextFieldTitulo.getText())) {
+            ap.setConsole(jTextFieldConsoleCadastro.getText().toUpperCase());
+            ap.setTitulo(jTextFieldTitulo.getText().toUpperCase());
+            ap.setTipo((String) jComboBoxCategoria.getSelectedItem());
+            switch (valor) {
+                case "VENDA":
+                if (tf.verificaEspacosEmbranco(jTextFieldValor.getText())) {
+                    ap.setValor(jTextFieldValor.getText());
+                    apDAO.cadastraAnuncio(ap);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Campo Valor vazio");
+                }
+                break;
+                case "TROCA":
+                ap.setValor("TROCA");
+                apDAO.cadastraAnuncio(ap);
+                break;
+                case "DOACAO":
+                ap.setValor("DOACAO");
+                apDAO.cadastraAnuncio(ap);
+                break;
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Preencha todos os campos");
+        }
+        try {
+            preenchertabelaMeusAnuncios();
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        limparCampoCadastroAnuncio();
+    }//GEN-LAST:event_jButtoncadastrarAnuncioActionPerformed
+
+    private void jTextFieldValorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldValorKeyTyped
+        String caracteres = "0987654321.";
+        if (!caracteres.contains(evt.getKeyChar() + "")) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextFieldValorKeyTyped
+
     private void jButtonVerAnuncioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVerAnuncioActionPerformed
         int selectedRowIndex = jTableBusca.getSelectedRow();
 
@@ -858,7 +1205,6 @@ public class Principal extends javax.swing.JFrame {
         p.setVisible(true);
         p.setResizable(false);
         p.enviaPalavra2(this, ap.getCodAnuncio(), u.getCodUsuario());
-
     }//GEN-LAST:event_jButtonVerAnuncioActionPerformed
 
     private void jButtonRemoveFiltrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveFiltrosActionPerformed
@@ -883,7 +1229,6 @@ public class Principal extends javax.swing.JFrame {
     private void jButtonFiltroCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltroCategoriaActionPerformed
         f.filtroCategoria((String) jComboBoxFiltroCategoria.getSelectedItem());
         montaLista();
-
     }//GEN-LAST:event_jButtonFiltroCategoriaActionPerformed
 
     private void jButtonAdicionarFiltroConsoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarFiltroConsoleActionPerformed
@@ -925,254 +1270,17 @@ public class Principal extends javax.swing.JFrame {
                 ap.getValor()
             });
         }
-
     }//GEN-LAST:event_jButtonBuscarActionPerformed
 
-    private void jComboBoxTipoTransacaoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxTipoTransacaoItemStateChanged
-        String valor = (String) jComboBoxTipoTransacao.getSelectedItem();
-        if (valor.equals("VENDA")) {
-            controleTipoAnuncio = true;
-            jLabelValor.setVisible(true);
-            jTextFieldValor.setVisible(true);
-        } else {
-            controleTipoAnuncio = false;
-            jLabelValor.setVisible(false);
-            jTextFieldValor.setVisible(false);
-        }
-    }//GEN-LAST:event_jComboBoxTipoTransacaoItemStateChanged
-
-    private void jButtonFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFotoActionPerformed
-
-        ap.setFoto(ie.lerImagem());
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        String novaSenha=JOptionPane.showInputDialog("Digite sua Nova senha: ");
+        JOptionPane.showMessageDialog(null,"Senha Alterada com sucesso!");
         try {
-            jLabelFoto.setIcon(ie.ConverterImagemAnuncio(ap));
-        } catch (IOException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jButtonFotoActionPerformed
-
-    private void jButtoncadastrarAnuncioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtoncadastrarAnuncioActionPerformed
-        String valor = (String) jComboBoxTipoTransacao.getSelectedItem();
-        ap.setCodUsuario(u.getCodUsuario());
-        if (tf.verificaEspacosEmbranco(jTextFieldTitulo.getText())) {
-            ap.setConsole(jTextFieldConsoleCadastro.getText().toUpperCase());
-            ap.setTitulo(jTextFieldTitulo.getText().toUpperCase());
-            ap.setTipo((String) jComboBoxCategoria.getSelectedItem());
-            switch (valor) {
-                case "VENDA":
-                    if (tf.verificaEspacosEmbranco(jTextFieldValor.getText())) {
-                        ap.setValor(jTextFieldValor.getText());
-                        apDAO.cadastraAnuncio(ap);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Campo Valor vazio");
-                    }
-                    break;
-                case "TROCA":
-                    ap.setValor("TROCA");
-                    apDAO.cadastraAnuncio(ap);
-                    break;
-                case "DOACAO":
-                    ap.setValor("DOACAO");
-                    apDAO.cadastraAnuncio(ap);
-                    break;
-            }
-
-        } else {
-            JOptionPane.showMessageDialog(null, "Preencha todos os campos");
-        }
-        try {
-            preenchertabelaMeusAnuncios();
+            uDAO.alterarSenha(u, novaSenha);
         } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        limparCampoCadastroAnuncio();
-    }//GEN-LAST:event_jButtoncadastrarAnuncioActionPerformed
-
-    private void jComboBoxCategoriaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxCategoriaItemStateChanged
-
-        String valor = (String) jComboBoxCategoria.getSelectedItem();
-        if (valor.equals("JOGO")) {
-            controleCategoriaAnuncio = true;
-            jLabelConsole.setVisible(true);
-            jTextFieldConsoleCadastro.setVisible(true);
-        } else {
-            controleCategoriaAnuncio = false;
-            jLabelConsole.setVisible(false);
-            jTextFieldConsoleCadastro.setVisible(false);
-        }
-
-    }//GEN-LAST:event_jComboBoxCategoriaItemStateChanged
-
-    private void jTextFieldValorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldValorKeyTyped
-        String caracteres = "0987654321.";
-        if (!caracteres.contains(evt.getKeyChar() + "")) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_jTextFieldValorKeyTyped
-
-    private void jButtonLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLimparActionPerformed
-        try {
-            ap.setCodAnuncio(0);
-            preenchertabelaRequisitos();
-            limparCampoCadastroAnuncio();
-            preenchertabelaMeusAnuncios();
-        } catch (SQLException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jButtonLimparActionPerformed
-
-    private void jButtonEncerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEncerrarActionPerformed
-        try {
-            // TODO add your handling code here:
-            int selectedRowIndex = jTableMeusProdutos.getSelectedRow();
-            ap.setCodUsuario(u.getCodUsuario());
-            ap = apListMeusProdutos.get(selectedRowIndex);
-            try {
-                apDAO.mudarStatusParaVendido(ap);
-            } catch (SQLException ex) {
-                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            preenchertabelaMeusAnuncios();
-            limparCampoCadastroAnuncio();
-            ap.setCodAnuncio(0);
-            preenchertabelaRequisitos();
-        } catch (SQLException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jButtonEncerrarActionPerformed
-
-    private void jButtonAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAlterarActionPerformed
-
-        int selectedRowIndex = jTableMeusProdutos.getSelectedRow();
-        ap.setCodUsuario(u.getCodUsuario());
-        ap = apListMeusProdutos.get(selectedRowIndex);
-        String valor = (String) jComboBoxTipoTransacao.getSelectedItem();
-        if (tf.verificaEspacosEmbranco(jTextFieldTitulo.getText())) {
-            ap.setConsole(jTextFieldConsoleCadastro.getText().toUpperCase());
-            ap.setTitulo(jTextFieldTitulo.getText().toUpperCase());
-            ap.setTipo((String) jComboBoxCategoria.getSelectedItem());
-            switch (valor) {
-                case "VENDA":
-                    if (tf.verificaEspacosEmbranco(jTextFieldValor.getText())) {
-                        ap.setValor(jTextFieldValor.getText());
-                        try {
-                            apDAO.alterarAnuncio(ap);
-                        } catch (SQLException ex) {
-                            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Campo Valor vazio");
-                    }
-                    break;
-                case "TROCA":
-                    ap.setValor("TROCA");
-                     {
-                        try {
-                            apDAO.alterarAnuncio(ap);
-                        } catch (SQLException ex) {
-                            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    break;
-                case "DOACAO":
-                    ap.setValor("DOACAO");
-                     {
-                        try {
-                            apDAO.alterarAnuncio(ap);
-                        } catch (SQLException ex) {
-                            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    break;
-            }
-
-            try {
-                apDAO.alterarAnuncio(ap);
-            } catch (SQLException ex) {
-                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Preencha todos os campos");
-        }
-
-        limparCampoCadastroAnuncio();
-        try {
-            ap.setCodAnuncio(0);
-            preenchertabelaMeusAnuncios();
-            preenchertabelaRequisitos();
-        } catch (SQLException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jButtonAlterarActionPerformed
-
-    private void jButtonAdicionarRequisitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarRequisitoActionPerformed
-        int selectedRowIndex = jTableMeusProdutos.getSelectedRow();
-        ap = apListMeusProdutos.get(selectedRowIndex);
-
-        if (tf.verificaEspacosEmbranco(jTextFieldInteresse.getText())) {
-            r.setInteresseEm(jTextFieldInteresse.getText().toUpperCase());
-            rDAO.adicionarRequisito(r, ap);
-            try {
-                preenchertabelaRequisitos();
-            } catch (SQLException ex) {
-                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Campo Vazio");
-        }
-        
-    }//GEN-LAST:event_jButtonAdicionarRequisitoActionPerformed
-
-    private void jButtonRemoveRequisitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveRequisitoActionPerformed
-       int selectedRowIndex = jTableRequisitos.getSelectedRow();
-       r=apListMeusRequisitos.get(selectedRowIndex);
-        try {
-            rDAO.apagarRequisito(r);
-        } catch (SQLException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            preenchertabelaRequisitos();
-        } catch (SQLException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jButtonRemoveRequisitoActionPerformed
-
-    private void jButtonVerMeuAnuncioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVerMeuAnuncioActionPerformed
-         int selectedRowIndex = jTableMeusProdutos.getSelectedRow();
-        ap.setCodUsuario(u.getCodUsuario());
-        ap = apListMeusProdutos.get(selectedRowIndex);
-        apDAO.constroiAnuncio(ap, ap.getCodAnuncio());
-        if (ap.getTipo().equals("JOGO")) {
-            jTextFieldConsoleCadastro.setText(ap.getConsole());
-            jComboBoxCategoria.setSelectedIndex(0);
-
-        } else if (ap.getTipo().equals("CONSOLE")) {
-            jComboBoxCategoria.setSelectedIndex(1);
-        } else {
-            jComboBoxCategoria.setSelectedIndex(2);
-        }
-        if (ap.getValor().equals("VENDA")) {
-            jTextFieldValor.setText(ap.getValor());
-            jComboBoxTipoTransacao.setSelectedIndex(0);
-
-        } else if (ap.getValor().equals("TROCA")) {
-            jComboBoxTipoTransacao.setSelectedIndex(1);
-        } else {
-            jComboBoxTipoTransacao.setSelectedIndex(2);
-        }
-
-        jTextFieldTitulo.setText(ap.getTitulo());
-        try {
-            jLabelFoto.setIcon(ie.ConverterImagemAnuncio(ap));
-            preenchertabelaRequisitos();
-        } catch (IOException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jButtonVerMeuAnuncioActionPerformed
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1214,8 +1322,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel abaAnunciar;
     private javax.swing.JPanel abaPesquisa;
     private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButtonAbrirTransacao;
     private javax.swing.JButton jButtonAdicionarFiltroConsole;
     private javax.swing.JButton jButtonAdicionarFiltroTransacao;
     private javax.swing.JButton jButtonAdicionarRequisito;
@@ -1228,6 +1335,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton jButtonLimpar;
     private javax.swing.JButton jButtonRemoveFiltros;
     private javax.swing.JButton jButtonRemoveRequisito;
+    private javax.swing.JButton jButtonRemoverTransacao;
     private javax.swing.JButton jButtonVerAnuncio;
     private javax.swing.JButton jButtonVerMeuAnuncio;
     private javax.swing.JButton jButtoncadastrarAnuncio;
@@ -1253,16 +1361,17 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelConsole;
     private javax.swing.JLabel jLabelFoto;
+    private javax.swing.JLabel jLabelFoto1;
     private javax.swing.JLabel jLabelValor;
     private javax.swing.JList<String> jListFiltros;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane2;
@@ -1270,9 +1379,9 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable4;
     private javax.swing.JTable jTableBusca;
+    private javax.swing.JTable jTableInteressadosMeusProdutos;
+    private javax.swing.JTable jTableMeusInteresses;
     private javax.swing.JTable jTableMeusProdutos;
     private javax.swing.JTable jTableRequisitos;
     private javax.swing.JTextField jTextFieldBusca;
