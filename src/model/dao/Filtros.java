@@ -1,16 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model.dao;
 
-/**
- *
- * @author USER
- */
-public class Filtros {// classe para adicionar filtros para as buscas de anuncios
+public class Filtros {
 
+    /*
+    classe para adicionar filtros para as buscas de anuncios
+    
+    Utiliza dois vetores, um com a resposta que é mostrada para o usuário e outro com a instrução sql parea buscar no banco de dados
+     */
+    
     private String filtrosSql[];// instrução sql
     private String filtrosMostrar[]; // para mostrar para o usuario o filtro 
 
@@ -28,34 +25,34 @@ public class Filtros {// classe para adicionar filtros para as buscas de anuncio
         return filtrosMostrar;
     }
 
-    public String joinRequisito() {
+    public String joinRequisito() {// caso utilize o filtro Requisito é necessario usar esse join
         return " join  REQUISITO as r  on   ap.cod_anuncio=r.cod_anuncio ";
     }
 
-    public void filtroTitulo(String titulo) {
+    public void filtroTitulo(String titulo) {//filtrando por título ex: Fifa 2018
         filtrosMostrar[0] = "Título: " + titulo;
         filtrosSql[0] = "and ap.titulo = '" + titulo.toUpperCase() + "' ";
 
     }
 
-    public void filtroConsole(String console) {
+    public void filtroConsole(String console) {//filtrando por console ex: playstation 4 ou ps4
         filtrosMostrar[1] = "No console: " + console.toUpperCase();
         filtrosSql[1] = "and ap.console = '" + console.toUpperCase() + "' ";
 
     }
 
-    public void filtroRequisito(String requisito) {
+    public void filtroRequisito(String requisito) {// filtrando por quem está aceitando o jogo que o usuário tem ex: tenho o jogo Gta V quem esta aceitando esse jogo como troca
         filtrosMostrar[2] = "Aceitando o jogo: " + requisito;
         filtrosSql[2] = "and r.interesse_em like '%" + requisito.toUpperCase() + "%' ";
 
     }
 
-    public void filtroCategoria(String categoria) {
+    public void filtroCategoria(String categoria) {// filtrando por categoria ex: jogo, console, acessório
         filtrosMostrar[3] = "Categoria: " + categoria;
         filtrosSql[3] = "and ap.tipo = '" + categoria + "' ";
     }
 
-    public void filtroValor(String valor) {
+    public void filtroValor(String valor) {// filtrando por tipo de transação ex: troca, Venda, doação
         if (valor.equals("VENDA")) {
 
             filtrosSql[4] = "and not ap.valor = 'TROCA' and not ap.valor='DOACAO' ";
@@ -66,12 +63,12 @@ public class Filtros {// classe para adicionar filtros para as buscas de anuncio
 
     }
 
-    public void removerFiltro(int index) {
+    public void removerFiltro(int index) {//remove o filtro dos vetores na posição passada como parâmetro
         filtrosMostrar[index] = "";
         filtrosSql[index] = "";
     }
 
-    public String filtrosParaString() {
+    public String filtrosParaString() {// passa todas as instrucões de consulta no banco de dados para uma única String
         String filtros = "";
         for (int i = 0; i < filtrosSql.length; i++) {
             filtros += filtrosSql[i] + " ";
@@ -79,7 +76,7 @@ public class Filtros {// classe para adicionar filtros para as buscas de anuncio
         return filtros;
     }
 
-    public void limpa() {
+    public void limpa() {// passa uma String vazia para todas as posições dos vetores
 
         for (int i = 0; i < filtrosSql.length; i++) {
             filtrosSql[i] = "";

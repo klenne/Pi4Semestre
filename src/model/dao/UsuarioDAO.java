@@ -81,11 +81,11 @@ public class UsuarioDAO {// Usuario Data Acess Object
         }
 
     }
-        public void constroiContato(Usuario u, int codUsuario) {
-       
+
+    public void constroiContato(Usuario u, int codUsuario) {
 
         // instrução SQL
-        String querryBusca = "select nome,email,telefone  from " + TABLE
+        String querryBusca = "select nome,email,telefone,cidade,uf,bairro,foto  from " + TABLE
                 + "  where cod_usuario=?";
 
         Connection con = ConnectionFactory.getConnection();
@@ -100,10 +100,13 @@ public class UsuarioDAO {// Usuario Data Acess Object
 
             // construindo um objeto usuario
             rs.next();
-            u.setEmail(rs.getString("email"));
             u.setNome(rs.getString("nome"));
+            u.setEmail(rs.getString("email"));
             u.setTelefone(rs.getString("telefone"));
-         
+            u.setCidade(rs.getString("cidade"));
+            u.setUf(rs.getString("uf"));
+            u.setBairro(rs.getString("bairro"));
+            u.setFoto(rs.getString("foto"));
 
         } catch (SQLException ex) {
             System.out.println(ex);

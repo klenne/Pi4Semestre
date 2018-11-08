@@ -85,7 +85,7 @@ public class Login extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(600, 600));
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("NOME DO PROGRAMA");
+        jLabel1.setText("Tiny Duck Green Gaming");
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jLabel1.setPreferredSize(new java.awt.Dimension(400, 30));
 

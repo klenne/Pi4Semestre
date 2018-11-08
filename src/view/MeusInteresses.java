@@ -6,6 +6,8 @@
 package view;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.bean.AnuncioProduto;
 import model.bean.Usuario;
@@ -35,16 +37,10 @@ UsuarioDAO uDAO=new UsuarioDAO();
     jLabelConsole.setText(ap.getConsole());
     jLabelValor.setText(ap.getValor());
     jLabelTitulo.setText(ap.getTitulo());
-    new Thread(t1).start();
+   
     
     
-    }    private Runnable t1 = new Runnable() {   
-        public void run() {
-         uDAO.constroiContato(u, ap.getCodUsuario());
-
-        }
-    };
-    
+    }  
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -157,7 +153,15 @@ UsuarioDAO uDAO=new UsuarioDAO();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonVerContatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVerContatoActionPerformed
-       JOptionPane.showMessageDialog(null, "Nome: "+u.getNome()+"\nTelefone: "+u.getTelefone()+"\n E-mail: "+u.getEmail());
+ Contato c = new Contato();
+                    c.setLocationRelativeTo(null);
+                    c.setVisible(true);
+                    c.setResizable(false);
+    try {
+        c.enviaPalavra4(this, ap.getCodUsuario());
+    } catch (IOException ex) {
+        Logger.getLogger(MeusInteresses.class.getName()).log(Level.SEVERE, null, ex);
+    }
     }//GEN-LAST:event_jButtonVerContatoActionPerformed
 
     private void jButtonVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarActionPerformed

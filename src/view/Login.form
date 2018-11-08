@@ -143,7 +143,7 @@
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="0"/>
-                <Property name="text" type="java.lang.String" value="NOME DO PROGRAMA"/>
+                <Property name="text" type="java.lang.String" value="Tiny Duck Green Gaming"/>
                 <Property name="horizontalTextPosition" type="int" value="0"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[400, 30]"/>
